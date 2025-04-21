@@ -5,17 +5,18 @@ import dotenv from "dotenv";
 import compilerRoutes from "./compiler.js";
 import Question from "./models/Question.js";
 import puppeteer from "puppeteer";  // Import Puppeteer
+import User from "./models/User.js";
+import authRoutes from './routes/auth.js';
+import bcrypt from 'bcrypt';
+import auth from './middleware/auth.js'; // Import the middleware
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/api/auth', authRoutes);
 
-// Connect to MongoDB and specify the database name
-// mongoose.connect(process.env.MONGO_URI, { dbName: "cf_cc_lc_test" })
-//   .then(() => console.log("✅ Connected to Mong     oDB: cf_cc_lc_test"))
-//   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 mongoose.connect(process.env.MONGO_URI, { dbName: "cf_cc_questions" })
   .then(() => console.log("✅ Connected to MongoDB: cf_cc_questions"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
@@ -40,6 +41,40 @@ app.get("/api/search", async (req, res) => {
   }
 });
 
+
+app.get('/api/protected', auth, (req, res) => {
+  res.json({ message: `Hello ${req.user.email}, you're authenticated!` });
+
+});
+app.post('/signup', async (req, res) => {
+  const { email, password, name } = req.body;
+  try {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) return res.status(400).json({ message: 'User already exists' });
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({ email, password: hashedPassword, name });
+      await newUser.save();
+
+      res.status(201).json({ message: 'Signup successful' });
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+});
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+      const user = await User.findOne({ email });
+      if (!user) return res.status(400).json({ message: 'User not found' });
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) return res.status(400).json({ message: 'Invalid password' });
+
+      res.status(200).json({ message: 'Login successful', user: { email, name: user.name } });
+  } catch (err) {
+      res.status(500).json({ error: err.message });
+  }
+});
 // Get a single question by ID
 app.get("/api/question/:id", async (req, res) => {
   try {

@@ -13,10 +13,12 @@
   "dependencies": {
     "@leetnotion/leetcode-api": "^1.10.0",
     "axios": "^1.8.2",
+    "bcrypt": "^5.1.1",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "leetcode-api": "^1.1.0",
     "leetcode-query": "^1.2.3",
     "mongoose": "^8.10.2",
