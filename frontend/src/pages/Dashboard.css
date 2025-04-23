@@ -1,0 +1,34 @@
+.dashboard-container {
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .dashboard-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .dashboard-card {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    border: 1px solid #ddd;
+  }
+  
+  .dashboard-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #444;
+  }
+  

@@ -1,0 +1,42 @@
+.topic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .topic-card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-left: 5px solid #4a90e2;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+  }
+  
+  .topic-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .topic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .topic-icon {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    color: #4a90e2;
+  }
+  
+  .solved-count {
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .suggestions {
+    margin-top: 10px;
+    font-style: italic;
+    color: #444;
+  }
+  

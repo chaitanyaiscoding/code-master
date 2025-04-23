@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import "../App.css";
 function Compiler() {
   const { questionId } = useParams();
   const [question, setQuestion] = useState(null);
@@ -18,7 +18,6 @@ function Compiler() {
         const response = await axios.get(`http://localhost:5000/api/question/${questionId}`);
         const questionData = response.data;
 
-        // If description is missing, fetch from /api/scrapeDescription
         if (!questionData.description && questionData.url) {
           const scrapeRes = await axios.get(`http://localhost:5000/api/scrapeDescription?url=${encodeURIComponent(questionData.url)}`);
           questionData.description = scrapeRes.data.description;
@@ -44,6 +43,34 @@ function Compiler() {
       setOutput(response.data.stdout || response.data.stderr || "No output");
     } catch (error) {
       setOutput("Error running code");
+    }
+  };
+
+  const markAsSolved = async () => {
+    const email = localStorage.getItem("userEmail");
+    if (!email) {
+      alert("Please log in to mark as solved.");
+      return;
+    }
+
+    const questionData = {
+      email: email,
+      questionId: question._id,    // Send MongoDB ID
+      questionTitle: question.title,
+      topic: question.topic
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/mark-solved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(questionData)
+      });
+
+      const data = await response.json();
+      alert(data.message);
+    } catch (err) {
+      alert("Error marking as solved!");
     }
   };
 
@@ -94,6 +121,10 @@ function Compiler() {
 
         <h3>Output:</h3>
         <pre style={{ background: "#f4f4f4", padding: "10px", minHeight: "50px" }}>{output}</pre>
+
+        <button onClick={markAsSolved} style={{ marginTop: "20px", padding: "10px", background: "#4CAF50", color: "white", border: "none", borderRadius: "5px" }}>
+          Mark as Solved
+        </button>
       </div>
     </div>
   );
