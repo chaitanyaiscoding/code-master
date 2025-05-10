@@ -1,5 +1,5 @@
 import React from 'react';
-import './WeakTopicPredictor.css'; // Add this CSS file
+import './WeakTopicPredictor.css'; 
 
 const WeakTopicPredictor = ({ email }) => {
   // Example data – replace with actual logic

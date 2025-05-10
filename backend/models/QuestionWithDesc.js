@@ -9,7 +9,6 @@ const QuestionWithDescSchema = new mongoose.Schema({
     description: { type: String, default: "No description available." }
 });
 
-// Add compound index for unique (title, source) pair
 QuestionWithDescSchema.index({ title: 1, source: 1 }, { unique: true });
 
 export default mongoose.model("QuestionWithDesc", QuestionWithDescSchema);

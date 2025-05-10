@@ -5,7 +5,7 @@ const QuestionSchema = new mongoose.Schema({
   url: { type: String, required: true },
   difficulty: { type: String, default: "N/A" },
   topic: { type: String, default: "Unknown" },
-  source: { type: String, required: true }, // ✅ Ensure this field exists
+  source: { type: String, required: true }, 
 });
 
 export default mongoose.model("Question", QuestionSchema);

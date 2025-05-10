@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 import leetcodeLogo from "../assets/leetcode.png";
@@ -16,7 +16,10 @@ const Search = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [solved, setSolved] = useState([]);
   const navigate = useNavigate();
+
+  const userEmail = localStorage.getItem("email");
 
   const handleSearch = async () => {
     if (!topic) return;
@@ -43,6 +46,26 @@ const Search = () => {
     }
   };
 
+  const fetchSolvedQuestions = async () => {
+    if (!userEmail) return;
+
+    try {
+      const res = await fetch(`http://localhost:5000/api/user/solved?email=${encodeURIComponent(userEmail)}`);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setSolved(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch solved questions", err);
+    }
+  };
+
+  useEffect(() => {
+    if (results.length > 0) {
+      fetchSolvedQuestions();
+    }
+  }, [results]);
+
   const handleSolve = (question) => {
     navigate(`/solve/${question._id}`, { state: { question } });
   };
@@ -63,7 +86,7 @@ const Search = () => {
           type="text"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
-          placeholder="Enter topic (e.g., DP, graph)..."
+          placeholder="Enter topic (e.g., greedy,Dynamic Programming, graph)..."
         />
         <button onClick={handleSearch} disabled={loading}>
           {loading ? "Searching..." : "Search"}
@@ -84,18 +107,25 @@ const Search = () => {
               {source} Problems
             </h3>
             <div className="results-grid">
-              {groupedResults[source].map((question, index) => (
-                <div
-                  key={index}
-                  className="question-card"
-                  onClick={() => handleSolve(question)}
-                >
-                  <h4>{question.title}</h4>
-                  <span className={`badge ${question.difficulty?.toLowerCase() || "na"}`}>
-                    {question.difficulty || "N/A"}
-                  </span>
-                </div>
-              ))}
+              {groupedResults[source].map((question, index) => {
+                const isSolved = solved.includes(question._id);
+
+                return (
+                  <div
+                    key={index}
+                    className={`question-card ${isSolved ? "solved" : ""}`}
+                    onClick={() => handleSolve(question)}
+                  >
+                    <h4>
+                      {question.title}
+                      {isSolved && <span style={{ marginLeft: "8px", color: "green" }}>✔</span>}
+                    </h4>
+                    <span className={`badge ${question.difficulty?.toLowerCase() || "na"}`}>
+                      {question.difficulty || "N/A"}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))

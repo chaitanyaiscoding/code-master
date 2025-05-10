@@ -1,13 +1,22 @@
-/* Login.css */
+/* Ensure body and html take up full height with no margin */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* This handles the entire login page */
 .login-page {
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(to right, #e0eafc, #cfdef3);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', sans-serif;
 }
 
+/* Login box/card styling */
 .login-container {
     background: white;
     padding: 40px;
@@ -25,12 +34,13 @@
 
 .login-container input {
     width: 100%;
-    padding: 10px 15px;
+    padding: 10px 12px 10px 12px; /* Equal horizontal padding */
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
 }
+
 
 .login-container button {
     width: 100%;

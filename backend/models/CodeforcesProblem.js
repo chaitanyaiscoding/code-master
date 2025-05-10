@@ -9,7 +9,6 @@ const CodeforcesProblemSchema = new mongoose.Schema({
     description: { type: String, default: "No description available." },
 });
 
-// Compound index with uniqueness
 CodeforcesProblemSchema.index({ title: 1, source: 1 }, { unique: true });
 
 export default mongoose.model('CodeforcesProblem', CodeforcesProblemSchema);

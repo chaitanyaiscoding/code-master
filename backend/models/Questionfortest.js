@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const TestCaseSchema = new mongoose.Schema({
-  problemTitle: { type: String, required: true }, // Must match the problem title in cf_cc_questions
-  problemSource: { type: String, required: true }, // Codeforces, CodeChef, LeetCode
+  problemTitle: { type: String, required: true }, 
+  problemSource: { type: String, required: true }, 
   input: { type: String, required: true },
   expectedOutput: { type: String, required: true },
 });

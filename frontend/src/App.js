@@ -36,7 +36,6 @@ function App() {
   );
 }
 
-// Inline styles (matches your app’s current look)
 const headerStyle = {
   backgroundColor: "#ffffff",
   padding: "20px 40px",

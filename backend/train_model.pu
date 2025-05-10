@@ -1,0 +1,30 @@
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.metrics import classification_report
+
+# Sample user problem-solving data
+data = pd.DataFrame({
+    'topic': ['DP', 'Graphs', 'Greedy', 'DP', 'Arrays'],
+    'difficulty': [3, 2, 1, 3, 1],  # 1: Easy, 2: Medium, 3: Hard
+    'solved': [0, 1, 0, 0, 1]  # 0 = Not solved, 1 = Solved
+})
+
+# Encode the 'topic' feature
+encoder = OneHotEncoder(sparse=False)
+topic_encoded = encoder.fit_transform(data[['topic']])
+topic_df = pd.DataFrame(topic_encoded, columns=encoder.get_feature_names_out(['topic']))
+
+# Combine encoded topics with other features
+features = pd.concat([topic_df, data[['difficulty']]], axis=1)
+labels = data['solved']
+
+# Split and train
+X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=42)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+predictions = model.predict(X_test)
+print(classification_report(y_test, predictions))
